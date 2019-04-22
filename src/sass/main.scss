@@ -1,0 +1,86 @@
+@charset 'utf-8';
+
+@import './nostromo-config';
+
+@import 'node_modules/nostromo-css/default.scss';
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9998;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+}
+
+.chat {
+  display: flex;
+
+  &__sidebar {
+    height: 100vh;
+    width: 220px;
+    overflow-y: scroll;
+  }
+
+  &__main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+  }
+
+  &__messages {
+    flex-grow: 1;
+    overflow-y: scroll;
+    padding: 1rem 1rem 0 1rem;
+
+    .message {
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+
+      &__header {
+      }
+
+      &__body {
+      }
+    }
+  }
+
+  &__composition {
+    flex-shrink: 0;
+    overflow-y: scroll;
+    margin-top: 1rem;
+    padding: 2rem;
+
+    .composition__form {
+      display: flex;
+      flex-grow: 1;
+      width: 100%;
+
+      .control {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.emojis {
+  .emoji {
+    cursor: pointer;
+  }
+}
