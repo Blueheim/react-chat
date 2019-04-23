@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import io from 'socket.io-client';
 import { clone } from 'ramda';
-import { formatMessage } from '../utils/message';
+import { formatMessage, autoScroll } from '../utils/message';
 import dayjs from 'dayjs';
 import Modal from './Modal';
 import JoinForm from './JoinForm';
 import Backdrop from './Backdrop';
 import ToggleContent from './ToggleContent';
 import EmojiList from './EmojiList';
+import StatusList from './StatusList';
+import StatusIndicator from './StatusIndicator';
 
 const Chat = props => {
   const userNameRef = useRef();
@@ -19,6 +21,8 @@ const Chat = props => {
   const [messages, setMessages] = useState([]);
   const [userName, setUserName] = useState('');
   const [roomName, setRoomName] = useState('');
+  const [status, setStatus] = useState('');
+  const [roomsInfos, setRoomsInfos] = useState([]);
   const [joinFormState, setJoinFormState] = useState({
     valid: false,
     fields: {
@@ -51,10 +55,36 @@ const Chat = props => {
       //autoScroll();
     });
 
+    sock.on('chat room data', ({ roomName, users }) => {
+      // updater form
+      setRoomsInfos(roomsInfos => {
+        const updatedRoomsInfos = clone(roomsInfos);
+        const roomInfosIndex = updatedRoomsInfos.findIndex(roomInfos => {
+          return roomInfos.name === roomName;
+        });
+
+        if (roomInfosIndex === -1) {
+          updatedRoomsInfos.push({
+            name: roomName,
+            users: users,
+          });
+        } else {
+          updatedRoomsInfos[roomInfosIndex].users = users;
+        }
+
+        return updatedRoomsInfos;
+      });
+    });
+
     setSocket(sock);
+
+    //-> To remove test purpose
+    setUserName('Xavier');
+    setRoomName('web');
+    //<-
   }, []);
 
-  // On change userName and roomName
+  // On update userName and roomName
   useEffect(() => {
     if (userName && roomName) {
       joinChat();
@@ -70,12 +100,14 @@ const Chat = props => {
         console.log(error);
       }
     });
-
-    socket.on('chat user join', ({ roomName, users }) => {
-      console.log(roomName);
-      console.log(users);
-    });
   };
+
+  // On update messages
+  useEffect(() => {
+    if (document.getElementById('messages')) {
+      autoScroll(document.getElementById('messages'));
+    }
+  }, [messages]);
 
   const handleSubmitJoinForm = e => {
     e.preventDefault();
@@ -114,6 +146,18 @@ const Chat = props => {
     }
   };
 
+  const handlerSelectStatus = (e, hideTooltip) => {
+    const status = e.target.dataset.status;
+    socket.emit('chat user status', status, error => {
+      if (error) {
+        return console.log(error);
+      }
+
+      setStatus(status);
+      hideTooltip();
+    });
+  };
+
   const handleSendNewMessage = event => {
     event.preventDefault();
 
@@ -138,31 +182,6 @@ const Chat = props => {
     });
   };
 
-  // to refactor for react
-  // const autoScroll = () => {
-  //   // New message
-  //   const newMessage = $messages.lastElementChild;
-
-  //   // Height of the new message
-  //   const newMessageStyles = getComputedStyle(newMessage);
-  //   const newMessageMargin = parseInt(newMessageStyles.marginBottom);
-  //   const newMessageHeight = newMessage.offsetHeight + newMessageMargin;
-
-  //   // VisibleHeight
-
-  //   const visibleHeight = $messages.offsetHeight;
-
-  //   // Height of messages container
-  //   const containerHeight = $messages.scrollHeight;
-
-  //   // How far have i scrolled
-  //   const scrollOffset = $messages.scrollTop + visibleHeight;
-
-  //   if (containerHeight - newMessageHeight <= scrollOffset) {
-  //     $messages.scrollTop = $messages.scrollHeight;
-  //   }
-  // };
-
   return (
     <React.Fragment>
       {!userName || !roomName ? (
@@ -174,11 +193,27 @@ const Chat = props => {
         </React.Fragment>
       ) : (
         <div className="chat">
-          <div className="chat__sidebar">
-            <span />
+          <div className="chat__sidebar m-secondary">
+            {/* TODO: componize room list */}
+            <div className="rooms">
+              {roomsInfos.map((roomInfos, roomIndex) => {
+                return (
+                  <div className="room" key={roomIndex}>
+                    <div className="room__name m-bg-secondary-dark">{roomInfos.name}</div>
+                    <ul className="room__users">
+                      {roomInfos.users.map((user, userIndex) => (
+                        <li className="room__user m-fx-st-c" key={userIndex}>
+                          <StatusIndicator status={user.status} /> {user.userName}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
           </div>
           <div className="chat__main">
-            <div className="chat__messages">
+            <div id="messages" className="chat__messages">
               {messages.map((message, index) => (
                 <span key={index} className="message">
                   <span className="message__header">
@@ -193,6 +228,18 @@ const Chat = props => {
                 <div className="control">
                   <input className="control__input m-bd-xt m-mg-xt-r m-pd-xt-l" ref={messageRef} autoComplete="off" />
                 </div>
+                <ToggleContent
+                  toggle={show => (
+                    <button className="m-primary m-pd-xt m-mg-xt-r m-fx-c-c" type="button" onClick={show}>
+                      <StatusIndicator status={status} />
+                    </button>
+                  )}
+                  content={hide => (
+                    <Modal>
+                      <StatusList clickHandler={e => handlerSelectStatus(e, hide)} />
+                    </Modal>
+                  )}
+                />
                 <ToggleContent
                   toggle={show => (
                     <button className="m-primary m-pd-xt m-mg-xt-r m-fx-c-c" type="button" onClick={show}>

@@ -84,3 +84,34 @@
     cursor: pointer;
   }
 }
+
+.rooms {
+  display: flex;
+  flex-direction: column;
+
+  .room {
+    &__name {
+      padding: 1rem;
+      font-weight: bold;
+    }
+
+    &__users {
+      padding: 1rem 1rem 1rem 2rem;
+    }
+  }
+}
+
+.round {
+  width: 1rem;
+  height: 1rem;
+}
+
+.status {
+  span {
+    pointer-events: none;
+  }
+
+  &:hover {
+    background-color: lightgrey;
+  }
+}
