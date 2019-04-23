@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import io from 'socket.io-client';
 import { clone } from 'ramda';
 import { formatMessage, autoScroll } from '../utils/message';
-import dayjs from 'dayjs';
+
 import Modal from './Modal';
 import JoinForm from './JoinForm';
 import Backdrop from './Backdrop';
@@ -11,6 +11,7 @@ import EmojiList from './EmojiList';
 import StatusList from './StatusList';
 import StatusIndicator from './StatusIndicator';
 import Tooltip from './Tooltip';
+import Message from './Message';
 
 const Chat = props => {
   const userNameRef = useRef();
@@ -80,8 +81,8 @@ const Chat = props => {
     setSocket(sock);
 
     //-> To remove test purpose
-    setUserName('Xavier');
-    setRoomName('web');
+    // setUserName('Xavier');
+    // setRoomName('web');
     //<-
   }, []);
 
@@ -94,7 +95,7 @@ const Chat = props => {
 
   const joinChat = () => {
     console.log(socket);
-    const joinMessage = formatMessage(userName, 'info', `${userName} joined`);
+    const joinMessage = formatMessage(userName, 'info', `${userName} joined the room`);
 
     socket.emit('chat join room', { roomName: roomName, message: joinMessage, userName: userName }, error => {
       if (error) {
@@ -162,6 +163,9 @@ const Chat = props => {
   const handleSendNewMessage = event => {
     event.preventDefault();
 
+    if (!messageRef.current.value) {
+      return false;
+    }
     console.log('submit');
 
     setButtonDisabled(true);
@@ -194,17 +198,18 @@ const Chat = props => {
         </React.Fragment>
       ) : (
         <div className="chat">
-          <div className="chat__sidebar m-secondary">
+          <div className="chat__sidebar m-primary">
             {/* TODO: componize room list */}
             <div className="rooms">
               {roomsInfos.map((roomInfos, roomIndex) => {
                 return (
                   <div className="room" key={roomIndex}>
-                    <div className="room__name m-bg-secondary-dark">{roomInfos.name}</div>
+                    <div className="room__name m-bg-primary-dark">#{roomInfos.name}</div>
                     <ul className="room__users">
                       {roomInfos.users.map((user, userIndex) => (
                         <li className="room__user m-fx-st-c" key={userIndex}>
-                          <StatusIndicator status={user.status} /> {user.userName}
+                          <StatusIndicator status={user.status} />
+                          <span className="m-pd-xt-l">{user.userName}</span>
                         </li>
                       ))}
                     </ul>
@@ -216,36 +221,41 @@ const Chat = props => {
           <div className="chat__main">
             <div id="messages" className="chat__messages">
               {messages.map((message, index) => (
-                <span key={index} className="message">
-                  <span className="message__header">
-                    {message.userName} - {dayjs(message.createdAt).format('HH:mm')}
-                  </span>
-                  <span className="message__body">{message.text}</span>
-                </span>
+                <Message key={index} message={message} isUserAuthored={message.userName === userName} />
               ))}
             </div>
-            <div className="chat__composition">
-              <form className="composition__form" onSubmit={handleSendNewMessage}>
-                <div className="control">
-                  <input className="control__input m-bd-xt m-mg-xt-r m-pd-xt-l" ref={messageRef} autoComplete="off" />
-                </div>
+            <div className="chat__composition m-bg-grey-light-2">
+              <form className="composition__form " onSubmit={handleSendNewMessage}>
                 <ToggleContent
                   toggleHOF={handlers => (
-                    <button className="m-primary m-pd-xt m-mg-xt-r m-fx-c-c" type="button" onClick={handlers.toggle}>
+                    <button
+                      id="toggleStatus"
+                      className="btn m-sw m-pd-xt m-mg-xt-r m-fx-c-c m-bg-white m-rd-xt"
+                      type="button"
+                      onClick={handlers.toggle}
+                    >
                       <StatusIndicator status={status} />
                     </button>
                   )}
                   contentHOF={hide => (
-                    <Modal>
-                      <StatusList clickHandler={e => handlerSelectStatus(e, hide)} />
-                    </Modal>
+                    <Tooltip referenceBoxId="toggleStatus" position="top" targetId="statutList">
+                      <StatusList id="statutList" clickHandler={e => handlerSelectStatus(e, hide)} />
+                    </Tooltip>
                   )}
                 />
+                <div className="control">
+                  <input
+                    className="control__input m-mg-xt-r m-pd-xt-l m-bd-xt-grey-light-3"
+                    ref={messageRef}
+                    autoComplete="off"
+                  />
+                </div>
+
                 <ToggleContent
                   toggleHOF={handlers => (
                     <button
                       id="toggleEmojis"
-                      className="m-primary m-pd-xt m-mg-xt-r m-fx-c-c"
+                      className="btn m-sw m-pd-xt m-mg-xt-r m-fx-c-c m-bg-white m-rd-xt"
                       type="button"
                       onClick={handlers.toggle}
                     >
@@ -260,7 +270,7 @@ const Chat = props => {
                     </Tooltip>
                   )}
                 />
-                <button className="m-primary m-pd-xt" type="submit" disabled={isSendButtonDisabled}>
+                <button className="btn m-info m-sw-info m-pd-xt m-rd-xt" type="submit" disabled={isSendButtonDisabled}>
                   Send
                 </button>
               </form>

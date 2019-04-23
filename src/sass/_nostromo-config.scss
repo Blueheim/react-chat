@@ -2,3 +2,17 @@
 
 @import 'node_modules/nostromo-css/sass/helpers/variables';
 @import 'node_modules/nostromo-css/sass/helpers/theme';
+@import 'node_modules/nostromo-css/sass/helpers/functions';
+
+$myColors: (
+  'primary': #a91b57,
+  'primary-light': tint(#a91b57, 20%),
+  'primary-dark': shade(#a91b57, 20%),
+  'secondary': #8f6296,
+  'secondary-light': tint(#8f6296, 20%),
+  'secondary-dark': shade(#8f6296, 20%),
+  'grey-light-2': #f7f7fa,
+  'info': #33658a,
+);
+
+$colors: map-merge($colors, $myColors);

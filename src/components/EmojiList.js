@@ -2,7 +2,7 @@ import React from 'react';
 
 const EmojiList = ({ id, clickHandler }) => {
   return (
-    <div id={id} className="emojis m-bg-white" onClick={clickHandler}>
+    <div id={id} className="emojis m-bg-white m-sw" onClick={clickHandler}>
       <span role="img" aria-label="" data-emoji="😂" className="emoji">
         😂
       </span>

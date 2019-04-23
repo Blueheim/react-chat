@@ -1,20 +1,20 @@
 import React from 'react';
 import StatusIndicator from './StatusIndicator';
 
-const StatusList = ({ clickHandler }) => {
+const StatusList = ({ id, clickHandler }) => {
   return (
-    <div onClick={clickHandler}>
-      <button className="status m-fx-st-c m-mg-xt-b" data-status="active">
+    <div id={id} onClick={clickHandler} className="m-fx-cl-c-sh m-sw m-bg-white">
+      <button className="status m-fx-st-c m-mg-xt-b m-pd-xt" data-status="active">
         <StatusIndicator status="active" />
-        <span>Active</span>
+        <span className="m-pd-xt-l">Active</span>
       </button>
-      <button className="status m-fx-st-c m-mg-xt-b" data-status="away">
+      <button className="status m-fx-st-c m-mg-xt-b m-pd-xt" data-status="away">
         <StatusIndicator status="away" />
-        <span>Away</span>
+        <span className="m-pd-xt-l">Away</span>
       </button>
-      <button className="status m-fx-st-c" data-status="busy">
+      <button className="status m-fx-st-c m-pd-xt" data-status="busy">
         <StatusIndicator status="busy" />
-        <span>Busy</span>
+        <span className="m-pd-xt-l">Busy</span>
       </button>
     </div>
   );

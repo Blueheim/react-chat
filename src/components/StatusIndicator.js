@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 const StatusIndicator = ({ status }) => {
-  const baseClasses = 'round m-rd-xx m-dp-bk m-mg-xt-r';
+  const baseClasses = 'round m-rd-xx m-dp-bk';
   let statusClass = '';
 
   switch (status) {

@@ -17,7 +17,7 @@ const Tooltip = ({ referenceBoxId, targetId, position, children }) => {
 
     switch (position) {
       case 'top':
-        tooltipRef.current.style.top = `${referencePosition.top - targetHeight}px`;
+        tooltipRef.current.style.top = `${referencePosition.top - targetHeight - 10}px`;
         tooltipRef.current.style.left = `${referencePosition.left + referencePosition.width / 2 - targetWidth / 2}px`;
         tooltipRef.current.style.opacity = 1;
         break;
