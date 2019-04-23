@@ -10,6 +10,7 @@ import ToggleContent from './ToggleContent';
 import EmojiList from './EmojiList';
 import StatusList from './StatusList';
 import StatusIndicator from './StatusIndicator';
+import Tooltip from './Tooltip';
 
 const Chat = props => {
   const userNameRef = useRef();
@@ -229,29 +230,34 @@ const Chat = props => {
                   <input className="control__input m-bd-xt m-mg-xt-r m-pd-xt-l" ref={messageRef} autoComplete="off" />
                 </div>
                 <ToggleContent
-                  toggle={show => (
-                    <button className="m-primary m-pd-xt m-mg-xt-r m-fx-c-c" type="button" onClick={show}>
+                  toggleHOF={handlers => (
+                    <button className="m-primary m-pd-xt m-mg-xt-r m-fx-c-c" type="button" onClick={handlers.toggle}>
                       <StatusIndicator status={status} />
                     </button>
                   )}
-                  content={hide => (
+                  contentHOF={hide => (
                     <Modal>
                       <StatusList clickHandler={e => handlerSelectStatus(e, hide)} />
                     </Modal>
                   )}
                 />
                 <ToggleContent
-                  toggle={show => (
-                    <button className="m-primary m-pd-xt m-mg-xt-r m-fx-c-c" type="button" onClick={show}>
+                  toggleHOF={handlers => (
+                    <button
+                      id="toggleEmojis"
+                      className="m-primary m-pd-xt m-mg-xt-r m-fx-c-c"
+                      type="button"
+                      onClick={handlers.toggle}
+                    >
                       <span role="img" aria-label="">
                         🙂
                       </span>
                     </button>
                   )}
-                  content={hide => (
-                    <Modal>
-                      <EmojiList clickHandler={e => handlerSelectEmoji(e, hide)} />
-                    </Modal>
+                  contentHOF={hide => (
+                    <Tooltip referenceBoxId="toggleEmojis" position="top" targetId="emojiList">
+                      <EmojiList id="emojiList" clickHandler={e => handlerSelectEmoji(e, hide)} />
+                    </Tooltip>
                   )}
                 />
                 <button className="m-primary m-pd-xt" type="submit" disabled={isSendButtonDisabled}>

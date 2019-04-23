@@ -1,8 +1,8 @@
 import React from 'react';
 
-const EmojiList = ({ clickHandler }) => {
+const EmojiList = ({ id, clickHandler }) => {
   return (
-    <div className="emojis" onClick={clickHandler}>
+    <div id={id} className="emojis m-bg-white" onClick={clickHandler}>
       <span role="img" aria-label="" data-emoji="😂" className="emoji">
         😂
       </span>

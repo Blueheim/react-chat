@@ -27,6 +27,15 @@
   background: transparent;
 }
 
+.tooltip {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  opacity: 0;
+}
+
 .chat {
   display: flex;
 
@@ -80,6 +89,10 @@
 }
 
 .emojis {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100px;
+
   .emoji {
     cursor: pointer;
   }
