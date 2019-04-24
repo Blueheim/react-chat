@@ -8,9 +8,12 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
+    "compression": "^1.7.4",
     "cross-env": "^5.2.0",
     "d3": "^5.9.2",
     "dayjs": "^1.8.12",
+    "express": "^4.16.4",
+    "helmet": "^3.16.0",
     "nostromo-css": "^0.2.37",
     "ramda": "^0.26.1",
     "react": "^16.8.6",
@@ -20,7 +23,8 @@
     "socket.io-client": "^2.2.0"
   },
   "scripts": {
-    "start": "cross-env REACT_APP_API_URL=http://localhost:5000 react-scripts start",
+    "start": "node server.js",
+    "start:dev": "cross-env REACT_APP_API_URL=http://localhost:5000 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
