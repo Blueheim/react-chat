@@ -26,9 +26,10 @@ const Message = ({ message, isUserAuthored }) => {
       rendering = (
         <span className={messageClasses}>
           <span className="message__header m-fs-xt">
-            {message.userName} - {dayjs(message.createdAt).format('HH:mm')}
+            {isUserAuthored ? 'Vous' : message.userName} - {dayjs(message.createdAt).format('HH:mm')}
           </span>
-          <span className={bodyClasses}>{message.text}</span>
+          {/* TO REFACTOR DANGEROUS */}
+          <span className={bodyClasses} dangerouslySetInnerHTML={{ __html: message.text }} />
         </span>
       );
       break;

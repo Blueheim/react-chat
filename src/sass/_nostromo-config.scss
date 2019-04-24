@@ -11,8 +11,14 @@ $myColors: (
   'secondary': #8f6296,
   'secondary-light': tint(#8f6296, 20%),
   'secondary-dark': shade(#8f6296, 20%),
+  'alert': #ff8c42,
+  // ff3c38,
+  // f64740,
   'grey-light-2': #f7f7fa,
-  'info': #33658a,
+  'info': #6699cc,
+  //33658a,
 );
+
+//3A2D32
 
 $colors: map-merge($colors, $myColors);
