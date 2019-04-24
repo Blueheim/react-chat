@@ -50,21 +50,21 @@ const AuthForm = ({ submitHandler }) => {
           <p className="m-pd-xt m-primary m-rd-xx">OR</p>
         </div>
         <div className="m-fx-cl-c-c">
-          <button class="oauth-cta btn m-fx-sb-c m-pd-xt m-pd-sm-h m-mg-xt-b m-bg-white">
+          <button className="oauth-cta btn m-fx-sb-c m-pd-xt m-pd-sm-h m-mg-xt-b m-bg-white">
             <img src={googleLogo} alt="Google logo" className="image" />
-            <p class="m-mg-sm-l">Sign in with Google</p>
+            <p className="m-mg-sm-l">Sign in with Google</p>
           </button>
-          <button class="oauth-cta btn m-fx-sb-c m-pd-xt m-pd-sm-h m-mg-xt-b m-bg-white">
+          <button className="oauth-cta btn m-fx-sb-c m-pd-xt m-pd-sm-h m-mg-xt-b m-bg-white">
             <img src={facebookLogo} alt="Facebook logo" className="image " />
-            <p class="m-mg-sm-l">Sign in with Facebook</p>
+            <p className="m-mg-sm-l">Sign in with Facebook</p>
           </button>
-          <button class="oauth-cta btn m-fx-sb-c m-pd-xt m-pd-sm-h m-mg-xt-b m-bg-white">
+          <button className="oauth-cta btn m-fx-sb-c m-pd-xt m-pd-sm-h m-mg-xt-b m-bg-white">
             <img src={twitterLogo} alt="Twitter logo" className="image" />
-            <p class="m-mg-sm-l">Sign in with twitter</p>
+            <p className="m-mg-sm-l">Sign in with twitter</p>
           </button>
-          <button class="oauth-cta btn m-fx-sb-c m-pd-xt m-pd-sm-h m-mg-xt-b m-bg-white">
+          <button className="oauth-cta btn m-fx-sb-c m-pd-xt m-pd-sm-h m-mg-xt-b m-bg-white">
             <img src={instagramLogo} alt="Instagram logo" className="image" />
-            <p class="m-mg-sm-l">Sign in with Instagram</p>
+            <p className="m-mg-sm-l">Sign in with Instagram</p>
           </button>
         </div>
       </div>

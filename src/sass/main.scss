@@ -151,7 +151,7 @@
     }
 
     &__users {
-      padding: 1rem 1rem 1rem 2rem;
+      padding: 0.5rem;
     }
   }
 }
@@ -168,5 +168,14 @@
 
   &:hover {
     background-color: color('grey-light-2');
+  }
+}
+
+.actions {
+  margin-top: 1rem;
+
+  .image {
+    width: 1.5rem;
+    height: 1.5rem;
   }
 }

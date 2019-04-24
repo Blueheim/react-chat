@@ -13,6 +13,10 @@ import StatusList from '../components/StatusList';
 import StatusIndicator from '../components/StatusIndicator';
 import Tooltip from '../components/Tooltip';
 import Message from '../components/Message';
+import TrustIndicator from '../components/TrustIndicator';
+
+import thumbsdownLogo from '../statics/images/thumbsdown.svg';
+import thumbsupLogo from '../statics/images/thumbsup.svg';
 
 const Chat = props => {
   const context = useContext(ChatConversationContext);
@@ -38,7 +42,7 @@ const Chat = props => {
 
   // On mount hook
   useEffect(() => {
-    let sock = io('http://localhost:5000/chat');
+    let sock = io(`${process.env.REACT_APP_API_URL}/chat`);
 
     sock.on('connect', () => {
       console.log('connected');
@@ -51,6 +55,7 @@ const Chat = props => {
     });
 
     sock.on('chat room data', ({ roomName, users }) => {
+      console.log(users);
       // updater form
       context.updateRoomsInfos(roomName, users);
     });
@@ -142,6 +147,29 @@ const Chat = props => {
     });
   };
 
+  const handleLowerTrust = (userId, value) => {
+    // disable actions buttons
+
+    context.socket.emit('chat user trust', { userId, value }, error => {
+      if (error) {
+        return console.log(error);
+      }
+
+      //Set timer enable actions buttons
+    });
+  };
+
+  const handleIncreaseTrust = (userId, value) => {
+    // disable actions buttons
+    context.socket.emit('chat user trust', { userId, value }, error => {
+      if (error) {
+        return console.log(error);
+      }
+
+      //Set timer enable actions buttons
+    });
+  };
+
   const handleSendNewMessage = event => {
     event.preventDefault();
 
@@ -189,10 +217,23 @@ const Chat = props => {
                     <div className="room__name m-bg-primary-dark">#{roomInfos.name}</div>
                     <ul className="room__users">
                       {roomInfos.users.map((user, userIndex) => (
-                        <li className="room__user m-fx-st-c" key={userIndex}>
-                          <StatusIndicator status={user.status} />
-                          <span className="m-pd-xt-l">{user.userName}</span>
-                        </li>
+                        <div key={userIndex} className="m-bg-primary-light m-rd-xt m-pd-xt m-mg-xt-b">
+                          <li className="room__user m-fx-sb-c">
+                            <StatusIndicator status={user.status} />
+                            <span className="m-pd-xt-l">{user.userName}</span>
+                            <div className="m-fx-cl-c-c ">
+                              <TrustIndicator rate={user.trustRate} width="30" height="30" />
+                            </div>
+                          </li>
+                          <div className="actions m-fx-st-c">
+                            <button className="btn m-mg-xt-r" onClick={e => handleLowerTrust(user.id, -0.05)}>
+                              <img src={thumbsdownLogo} alt="Lower trust" className="image" />
+                            </button>
+                            <button className="btn" onClick={e => handleIncreaseTrust(user.id, +0.05)}>
+                              <img src={thumbsupLogo} alt="Increase trust" className="image" />
+                            </button>
+                          </div>
+                        </div>
                       ))}
                     </ul>
                   </div>
