@@ -1,11 +1,11 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 import googleLogo from '../statics/images/google.svg';
 import facebookLogo from '../statics/images/facebook.svg';
 import twitterLogo from '../statics/images/twitter.svg';
 import instagramLogo from '../statics/images/instagram.svg';
 
-const AuthForm = ({ submitHandler }) => {
+const SignInForm = ({ submitHandler }) => {
   return (
     <div className="auth-box m-sw m-rd-xt m-bg-grey-light-2 m-pd-md">
       <h1 className="title m-fs-sm m-wt-300 m-mg-xs-b">Sign in</h1>
@@ -41,9 +41,9 @@ const AuthForm = ({ submitHandler }) => {
           </button>
           <p>
             Not a member yet ?{' '}
-            <a href="#" title="" className="m-tx-primary">
+            <Link to="/signup" className="m-tx-primary">
               Create an account
-            </a>
+            </Link>
           </p>
         </form>
         <div className="m-fx-cl-c-c m-mg-xl-h m-wt-700">
@@ -72,4 +72,4 @@ const AuthForm = ({ submitHandler }) => {
   );
 };
 
-export default AuthForm;
+export default SignInForm;
