@@ -42,7 +42,7 @@ const Chat = props => {
 
   // On mount hook
   useEffect(() => {
-    let sock = io(`${process.env.REACT_APP_API_URL}/chat`);
+    let sock = io(`${process.env.REACT_APP_COM_API_URL}/chat`);
 
     sock.on('connect', () => {
       console.log('connected');

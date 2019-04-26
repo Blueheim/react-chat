@@ -13,6 +13,10 @@ const AuthContext = React.createContext({
   disableSignUpButton: () => {},
   enableSignUpButton: () => {},
   signUp: () => {},
+  signUpData: {},
+  signIn: () => {},
+  authentication: { isAuthenticated: false, token: '' },
+  authenticate: () => {},
 });
 
 export default AuthContext;

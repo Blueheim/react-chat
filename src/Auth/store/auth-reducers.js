@@ -7,10 +7,24 @@ const signUpReducer = (state, action) => {
     case actions.SIGN_UP_SUCCESS:
       return { ...state, isLoading: false, data: action.payload, error: {} };
     case actions.SIGN_UP_FAILED:
-      return { ...state, isLoading: false, error: {} };
+      return { ...state, isLoading: false, error: action.payload };
     default:
       throw new Error('Unexpected action');
   }
 };
 
-export { signUpReducer };
+const signInReducer = (state, action) => {
+  console.log(action);
+  switch (action.type) {
+    case actions.SIGN_IN_PENDING:
+      return { ...state, isLoading: true, error: {} };
+    case actions.SIGN_IN_SUCCESS:
+      return { ...state, isLoading: false, data: action.payload, error: {} };
+    case actions.SIGN_IN_FAILED:
+      return { ...state, isLoading: false, error: action.payload };
+    default:
+      throw new Error('Unexpected action');
+  }
+};
+
+export { signInReducer, signUpReducer };

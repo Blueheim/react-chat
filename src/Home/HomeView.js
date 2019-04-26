@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import HomeNavigation from './HomeNavigation';
 import SignInForm from '../Auth/SignInForm';
+import AuthContext from '../Auth/store/auth-context';
 
 const HomeView = () => {
+  const authContext = useContext(AuthContext);
+
   return (
     // <div className="l-nav">
     //   <nav className="nav--bar">
@@ -12,6 +15,7 @@ const HomeView = () => {
     //     </ul>
     //   </nav>
     // </div>
+
     <header className="home l-header l-hero">
       <HomeNavigation />
       <div className="l-header__content ">
@@ -23,9 +27,11 @@ const HomeView = () => {
             I can't wait
           </Link>
         </div>
-        <div className="home__auth-form m-fx-cl-c-c">
-          <SignInForm />
-        </div>
+        {!authContext.authentication.isAuthenticated && (
+          <div className="home__auth-form m-fx-cl-c-c">
+            <SignInForm />
+          </div>
+        )}
       </div>
     </header>
   );

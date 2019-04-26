@@ -1,7 +1,9 @@
 import React, { useState, useReducer } from 'react';
 import AuthContext from './auth-context';
 import * as actions from './auth-actions';
-import { signUpReducer } from './auth-reducers';
+import api from './auth-api';
+import fetchData from '../../utils/fetchData';
+import { signInReducer, signUpReducer } from './auth-reducers';
 
 const AuthState = ({ children }) => {
   const [userName, setUserName] = useState('');
@@ -11,7 +13,18 @@ const AuthState = ({ children }) => {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [isSignUpButtonDisabled, setSignUpButtonDisabled] = useState(false);
-  const [authentication, dispatch] = useReducer(signUpReducer, { token: '' });
+  const [authentication, setAuthentication] = useState({ isAuthenticated: false, token: '' });
+  const [signInData, signInDispatch] = useReducer(signInReducer, {
+    isLoading: false,
+    data: null,
+    error: null,
+  });
+
+  const [signUpData, signUpDispatch] = useReducer(signUpReducer, {
+    isLoading: false,
+    data: null,
+    error: null,
+  });
 
   const updateUserName = userName => {
     setUserName(userName);
@@ -38,15 +51,59 @@ const AuthState = ({ children }) => {
     setSignUpButtonDisabled(false);
   };
 
-  const signUp = params => {
-    dispatch({
+  const signUp = formData => {
+    console.log('signup');
+    signUpDispatch({
       type: actions.SIGN_UP_PENDING,
     });
 
-    fetchData(REQUEST_HISTORY, params).subscribe(
-      data => dispatch({ type: actions.SIGN_UP_SUCCESS, payload: data }),
-      err => dispatch({ type: actions.SIGN_UP_FAILED, payload: err })
+    fetchData({
+      url: api[actions.SIGN_UP].url,
+      options: {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      },
+    }).subscribe(
+      data => signUpDispatch({ type: actions.SIGN_UP_SUCCESS, payload: data }),
+      err => {
+        console.log(err);
+        signUpDispatch({ type: actions.SIGN_UP_FAILED, payload: err });
+      }
     );
+  };
+
+  const signIn = formData => {
+    console.log('signin');
+    signInDispatch({
+      type: actions.SIGN_IN_PENDING,
+    });
+
+    fetchData({
+      url: api[actions.SIGN_IN].url,
+      options: {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      },
+    }).subscribe(
+      data => signInDispatch({ type: actions.SIGN_IN_SUCCESS, payload: data }),
+      err => {
+        console.log(err);
+        signInDispatch({ type: actions.SIGN_IN_FAILED, payload: err });
+      }
+    );
+  };
+
+  const authenticate = token => {
+    setAuthentication({
+      isAuthenticated: true,
+      token,
+    });
   };
 
   return (
@@ -63,6 +120,12 @@ const AuthState = ({ children }) => {
         isSignUpButtonDisabled,
         disableSignUpButton,
         enableSignUpButton,
+        signUp,
+        signUpData,
+        signIn,
+        signInData,
+        authentication,
+        authenticate,
       }}
     >
       {children}

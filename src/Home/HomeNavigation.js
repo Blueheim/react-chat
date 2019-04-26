@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import AuthContext from '../Auth/store/auth-context';
 
 import { NavLink } from 'react-router-dom';
 
 import logo from '../statics/images/logo.png';
 
 const HomeNavigation = () => {
+  const authContext = useContext(AuthContext);
+
   return (
     <div className="l-nav">
       <nav className="nav nav--bar m-pd-md-h">
@@ -21,7 +24,11 @@ const HomeNavigation = () => {
             <NavLink to="/">Help</NavLink>
           </li>
           <li className="nav__action m-tx-white">
-            <NavLink to="/">Your account</NavLink>
+            {!authContext.authentication.isAuthenticated ? (
+              <NavLink to="/signin">Sign in</NavLink>
+            ) : (
+              <NavLink to="/account">Your account</NavLink>
+            )}
           </li>
         </ul>
       </nav>

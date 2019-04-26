@@ -1,11 +1,12 @@
 import React, { useRef, useState, useContext, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import styles from './SignupForm.module.scss';
 import ReCAPTCHA from 'react-google-recaptcha';
 import classNames from 'classnames';
 import { clone } from 'ramda';
 import AuthContext from './store/auth-context';
 
-const SignUpForm = () => {
+const SignUpForm = props => {
   const context = useContext(AuthContext);
 
   const userNameRef = useRef();
@@ -48,12 +49,22 @@ const SignUpForm = () => {
 
   useEffect(() => {
     if (formState.valid) {
-      console.log(context.email);
-      console.log(context.userName);
-      console.log(context.password);
-      console.log(context.passwordConfirmation);
+      const formData = {
+        email: context.email,
+        name: context.userName,
+        password: context.password,
+        passwordConfirmation: context.passwordConfirmation,
+      };
+
+      context.signUp(formData);
     }
   }, [context.email, context.userName, context.password, context.passwordConfirmation]);
+
+  useEffect(() => {
+    if (context.signUpData.data) {
+      props.history.push('/');
+    }
+  }, [context.signUpData]);
 
   const handleRecaptchaResponse = value => {
     //context.enableSignUpButton();
@@ -238,4 +249,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default withRouter(SignUpForm);

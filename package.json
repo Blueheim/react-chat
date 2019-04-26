@@ -21,12 +21,12 @@
     "react-google-recaptcha": "^1.0.5",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
-    "simplehttpobservable": "^1.9.0",
+    "simplehttpobservable": "^2.0.1",
     "socket.io-client": "^2.2.0"
   },
   "scripts": {
     "start": "node server.js",
-    "dev": "cross-env REACT_APP_API_URL=http://localhost:5000 react-scripts start",
+    "dev": "cross-env REACT_APP_API_URL=http://localhost:7000 REACT_APP_COM_API_URL=http://localhost:5000 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
