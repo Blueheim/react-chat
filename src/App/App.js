@@ -5,7 +5,7 @@ import AuthState from '../Auth/store/AuthState';
 
 import ChatView from '../Chat/ChatView';
 import HomeView from '../Home/HomeView';
-import SignUpView from '../Auth/SignUpView';
+import SignUpView from '../Auth/SignUp/SignUpView';
 
 const App = () => (
   <div className="App">

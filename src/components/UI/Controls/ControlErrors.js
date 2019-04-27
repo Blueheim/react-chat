@@ -8,7 +8,7 @@ const ControlErrors = ({ errors, className }) => {
     <div className="errors m-mg-md-b">
       {errors.map((error, index) => (
         <p key={index} className={classes}>
-          {error.text}
+          {error}
         </p>
       ))}
     </div>

@@ -92,9 +92,7 @@ const SignInForm = props => {
         {/* Local auth */}
         <form action="#" className="local-auth m-fx-cl-c-sh" onSubmit={handleSubmit}>
           {/* email */}
-          <ControlLabel htmlFor="email" className="m-mg-xt-b m-wt-700">
-            Email address
-          </ControlLabel>
+          <ControlLabel htmlFor="email">Email address</ControlLabel>
           <ControlInput
             ref={emailRef}
             attributes={{
@@ -108,9 +106,7 @@ const SignInForm = props => {
           />
           <ControlErrors errors={formState.fields.email.errors} />
           {/* password */}
-          <ControlLabel htmlFor="password" className="m-mg-xt-b m-wt-700">
-            Password
-          </ControlLabel>
+          <ControlLabel htmlFor="password">Password</ControlLabel>
           <ControlInput
             ref={passwordRef}
             attributes={{

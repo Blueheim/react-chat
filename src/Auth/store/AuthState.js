@@ -63,13 +63,13 @@ const AuthState = ({ children }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify(formData),
       },
     }).subscribe(
       data => signUpDispatch({ type: actions.SIGN_UP_SUCCESS, payload: data }),
       err => {
-        console.log(err);
         signUpDispatch({ type: actions.SIGN_UP_FAILED, payload: err });
       }
     );
