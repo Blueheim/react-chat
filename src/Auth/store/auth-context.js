@@ -15,6 +15,7 @@ const AuthContext = React.createContext({
   signUp: () => {},
   signUpData: {},
   signIn: () => {},
+  GoogleSignIn: () => {},
   authentication: { isAuthenticated: false, token: '' },
   authenticate: () => {},
 });

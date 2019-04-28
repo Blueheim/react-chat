@@ -6,12 +6,6 @@ import fetchData from '../../utils/fetchData';
 import { signInReducer, signUpReducer } from './auth-reducers';
 
 const AuthState = ({ children }) => {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  // Better not store password as a state
-  // Just for prototyping purpose
-  const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [isSignUpButtonDisabled, setSignUpButtonDisabled] = useState(false);
   const [authentication, setAuthentication] = useState({ isAuthenticated: false, token: '' });
   const [signInData, signInDispatch] = useReducer(signInReducer, {
@@ -25,22 +19,6 @@ const AuthState = ({ children }) => {
     data: null,
     error: null,
   });
-
-  const updateUserName = userName => {
-    setUserName(userName);
-  };
-
-  const updateEmail = email => {
-    setEmail(email);
-  };
-
-  const updatePassword = password => {
-    setPassword(password);
-  };
-
-  const updatePasswordConfirmation = password => {
-    setPasswordConfirmation(password);
-  };
 
   // SignUp button
   const disableSignUpButton = () => {
@@ -99,6 +77,19 @@ const AuthState = ({ children }) => {
     );
   };
 
+  const GoogleSignIn = () => {
+    console.log('google sign in');
+    fetchData({
+      url: api[actions.SIGN_IN_GOOGLE].url,
+    }).subscribe(
+      data => signInDispatch({ type: actions.SIGN_IN_SUCCESS, payload: data }),
+      err => {
+        console.log(err);
+        signInDispatch({ type: actions.SIGN_IN_FAILED, payload: err });
+      }
+    );
+  };
+
   const authenticate = token => {
     setAuthentication({
       isAuthenticated: true,
@@ -109,14 +100,6 @@ const AuthState = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        userName,
-        updateUserName,
-        email,
-        updateEmail,
-        password,
-        updatePassword,
-        passwordConfirmation,
-        updatePasswordConfirmation,
         isSignUpButtonDisabled,
         disableSignUpButton,
         enableSignUpButton,
@@ -124,6 +107,7 @@ const AuthState = ({ children }) => {
         signUpData,
         signIn,
         signInData,
+        GoogleSignIn,
         authentication,
         authenticate,
       }}

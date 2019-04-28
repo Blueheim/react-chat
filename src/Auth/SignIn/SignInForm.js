@@ -1,40 +1,36 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import googleLogo from '../statics/images/google.svg';
-import facebookLogo from '../statics/images/facebook.svg';
-import twitterLogo from '../statics/images/twitter.svg';
-import instagramLogo from '../statics/images/instagram.svg';
-import { clone } from 'ramda';
-import AuthContext from './store/auth-context';
-import ControlInput from '../components/UI/Controls/ControlInput';
-import ControlLabel from '../components/UI/Controls/ControlLabel';
-import ControlErrors from '../components/UI/Controls/ControlErrors';
-import Button from '../components/UI/Button';
+import googleLogo from '../../statics/images/google.svg';
+import facebookLogo from '../../statics/images/facebook.svg';
+import twitterLogo from '../../statics/images/twitter.svg';
+import instagramLogo from '../../statics/images/instagram.svg';
+import AuthContext from '../store/auth-context';
+import ControlInput from '../../components/UI/Controls/ControlInput';
+import ControlLabel from '../../components/UI/Controls/ControlLabel';
+import ControlErrors from '../../components/UI/Controls/ControlErrors';
+import Button from '../../components/UI/Button';
+import schema from './schema';
+import validate from '../../utils/validate';
 
 const SignInForm = props => {
+  const context = useContext(AuthContext);
+
   const emailRef = useRef();
   const passwordRef = useRef();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const context = useContext(AuthContext);
+  const [globalError, setGlobalError] = useState('');
 
   const [formState, setFormState] = useState({
-    valid: false,
-    fields: {
-      email: {
-        errors: [],
-      },
-      password: {
-        errors: [],
-      },
-    },
+    isValid: false,
+    validationResult: {},
   });
 
   // Triggered in update only if email and password changed
   useEffect(() => {
-    if (formState.valid) {
+    if (formState.isValid) {
       const formData = {
         email: email,
         password: password,
@@ -47,6 +43,10 @@ const SignInForm = props => {
     if (context.signInData.data) {
       context.authenticate(context.signInData.data.token);
     }
+
+    if (context.signInData.error) {
+      setGlobalError(context.signInData.error.data.error);
+    }
   }, [context.signInData]);
 
   const handleChangeEmail = e => {
@@ -57,37 +57,27 @@ const SignInForm = props => {
     setPassword(e.target.value);
   };
 
+  const handleGoogleSignIn = e => {
+    console.log('click');
+    context.GoogleSignIn();
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
 
-    const updatedFormState = clone(formState);
+    const validation = validate(schema, {
+      email,
+      password,
+    });
 
-    const emailField = updatedFormState.fields['email'];
-    const passwordField = updatedFormState.fields['password'];
-
-    // Reset
-    updatedFormState.valid = true;
-    emailField.errors = [];
-    passwordField.errors = [];
-
-    //Required check
-    if (!email.trim()) {
-      emailField.errors.push({ text: 'A valid email is required' });
-      updatedFormState.valid = false;
-    }
-
-    if (!password.trim()) {
-      passwordField.errors.push({ text: 'A valid password is required' });
-      updatedFormState.valid = false;
-    }
-
-    setFormState(updatedFormState);
+    setFormState(validation);
   };
 
   return (
     <div className="auth-box m-sw m-rd-xt m-bg-grey-light-2 m-pd-md">
       <h1 className="title m-fs-sm m-wt-300 m-mg-xs-b">Sign in</h1>
       <hr className="m-bd-xt-grey-light-3" />
+      {globalError && <p className="m-tx-invalid">{globalError}</p>}
       <div className="m-fx-sb-sh m-pd-ty-t">
         {/* Local auth */}
         <form action="#" className="local-auth m-fx-cl-c-sh" onSubmit={handleSubmit}>
@@ -104,7 +94,7 @@ const SignInForm = props => {
             }}
             eventHandlers={{ onChange: handleChangeEmail }}
           />
-          <ControlErrors errors={formState.fields.email.errors} />
+          {formState.validationResult.email && <ControlErrors errors={formState.validationResult.email.errors} />}
           {/* password */}
           <ControlLabel htmlFor="password">Password</ControlLabel>
           <ControlInput
@@ -118,7 +108,7 @@ const SignInForm = props => {
             }}
             eventHandlers={{ onChange: handleChangePassword }}
           />
-          <ControlErrors errors={formState.fields.password.errors} />
+          {formState.validationResult.password && <ControlErrors errors={formState.validationResult.password.errors} />}
 
           <Button attributes={{ type: 'submit' }} className="m-primary m-rd-xx m-pd-xt m-mg-sm-b">
             Sign in
@@ -134,7 +124,10 @@ const SignInForm = props => {
           <p className="m-pd-xt m-primary m-rd-xx">OR</p>
         </div>
         <div className="m-fx-cl-c-c">
-          <Button className="oauth-cta m-fx-sb-c m-pd-xt m-pd-sm-h m-mg-xt-b m-bg-white">
+          <Button
+            className="oauth-cta m-fx-sb-c m-pd-xt m-pd-sm-h m-mg-xt-b m-bg-white"
+            eventHandlers={{ onClick: handleGoogleSignIn }}
+          >
             <img src={googleLogo} alt="Google logo" className="image" />
             <p className="m-mg-sm-l">Sign in with Google</p>
           </Button>

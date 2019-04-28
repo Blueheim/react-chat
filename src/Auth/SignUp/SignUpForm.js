@@ -1,14 +1,18 @@
 import React, { useRef, useState, useContext, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import styles from './SignupForm.module.scss';
 import ReCAPTCHA from 'react-google-recaptcha';
 import classNames from 'classnames';
-import { clone } from 'ramda';
 import AuthContext from '../store/auth-context';
 import ControlLabel from '../../components/UI/Controls/ControlLabel';
 import ControlInput from '../../components/UI/Controls/ControlInput';
 import ControlErrors from '../../components/UI/Controls/ControlErrors';
-import validate from './validate';
+import validate from '../../utils/validate';
+import schema from './schema';
+
+window.recaptchaOptions = {
+  lang: 'en',
+};
 
 const SignUpForm = props => {
   const context = useContext(AuthContext);
@@ -27,29 +31,6 @@ const SignUpForm = props => {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [recaptcha, setRecaptcha] = useState('');
-
-  const formSchema = {
-    email: {
-      label: 'Email',
-      rules: ['REQUIRED', 'EMAIL'],
-    },
-    userName: {
-      label: 'Username',
-      rules: ['REQUIRED', 'ONLY_LETTERS', { MIN_LENGTH: 5 }],
-    },
-    password: {
-      label: 'Password',
-      rules: ['REQUIRED', { MIN_LENGTH: 5 }],
-    },
-    passwordConfirmation: {
-      label: 'Password confirmation',
-      rules: ['REQUIRED', { FIELD_EQUALITY: 'password' }],
-    },
-    recaptcha: {
-      label: 'recaptcha',
-      rules: ['REQUIRED'],
-    },
-  };
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -102,9 +83,8 @@ const SignUpForm = props => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('submit');
 
-    const validation = validate(formSchema, {
+    const validation = validate(schema, {
       email,
       userName,
       password,
@@ -196,6 +176,12 @@ const SignUpForm = props => {
         >
           Sign Up
         </button>
+        <p className="m-tx-c">
+          Already have an account ?{' '}
+          <Link to="/" className="m-tx-primary">
+            Sign in
+          </Link>
+        </p>
       </form>
     </div>
   );

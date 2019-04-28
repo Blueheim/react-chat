@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import HomeNavigation from './HomeNavigation';
-import SignInForm from '../Auth/SignInForm';
+import SignInForm from '../Auth/SignIn/SignInForm';
 import AuthContext from '../Auth/store/auth-context';
 
 const HomeView = () => {

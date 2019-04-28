@@ -1,10 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const Button = ({ children, attributes, className }) => {
+const Button = ({ children, attributes, eventHandlers, className }) => {
   const classes = classNames('btn', className);
   return (
-    <button {...attributes} className={classes}>
+    <button {...attributes} className={classes} {...eventHandlers}>
       {children}
     </button>
   );
