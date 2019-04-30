@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import googleLogo from '../../statics/images/google.svg';
 import facebookLogo from '../../statics/images/facebook.svg';
 import twitterLogo from '../../statics/images/twitter.svg';
@@ -28,6 +28,11 @@ const SignInForm = props => {
     validationResult: {},
   });
 
+  // On mount
+  useEffect(() => {
+    context.getGoogleUrl();
+  }, []);
+
   // Triggered in update only if email and password changed
   useEffect(() => {
     if (formState.isValid) {
@@ -40,14 +45,15 @@ const SignInForm = props => {
   }, [formState]);
 
   useEffect(() => {
-    if (context.signInData.data) {
-      context.authenticate(context.signInData.data.token);
+    if (context.signInResult.data) {
+      context.authenticate(context.signInResult.data.authToken);
+      props.history.push('/');
     }
 
-    if (context.signInData.error) {
-      setGlobalError(context.signInData.error.data.error);
+    if (context.signInResult.error) {
+      setGlobalError(context.signInResult.error.data.error);
     }
-  }, [context.signInData]);
+  }, [context.signInResult]);
 
   const handleChangeEmail = e => {
     setEmail(e.target.value);
@@ -124,13 +130,13 @@ const SignInForm = props => {
           <p className="m-pd-xt m-primary m-rd-xx">OR</p>
         </div>
         <div className="m-fx-cl-c-c">
-          <Button
-            className="oauth-cta m-fx-sb-c m-pd-xt m-pd-sm-h m-mg-xt-b m-bg-white"
-            eventHandlers={{ onClick: handleGoogleSignIn }}
+          <a
+            href={context.googleUrlResult.data}
+            className="oauth-cta btn m-fx-sb-c m-pd-xt m-pd-sm-h m-mg-xt-b m-bg-white"
           >
             <img src={googleLogo} alt="Google logo" className="image" />
             <p className="m-mg-sm-l">Sign in with Google</p>
-          </Button>
+          </a>
           <Button className="oauth-cta m-fx-sb-c m-pd-xt m-pd-sm-h m-mg-xt-b m-bg-white">
             <img src={facebookLogo} alt="Facebook logo" className="image " />
             <p className="m-mg-sm-l">Sign in with Facebook</p>
@@ -149,4 +155,4 @@ const SignInForm = props => {
   );
 };
 
-export default SignInForm;
+export default withRouter(SignInForm);

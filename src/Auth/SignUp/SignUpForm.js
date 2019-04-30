@@ -52,14 +52,14 @@ const SignUpForm = props => {
   }, [formState]);
 
   useEffect(() => {
-    if (context.signUpData.data) {
+    if (context.signUpResult.data) {
       props.history.push('/');
     }
 
-    if (context.signUpData.error) {
-      setGlobalError(context.signUpData.error.data.error);
+    if (context.signUpResult.error) {
+      setGlobalError(context.signUpResult.error.data.error);
     }
-  }, [context.signUpData]);
+  }, [context.signUpResult]);
 
   const handleChangeEmail = e => {
     setEmail(e.target.value);

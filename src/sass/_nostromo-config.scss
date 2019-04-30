@@ -15,10 +15,8 @@ $myColors: (
   // ff3c38,
   // f64740,
   'grey-light-2': #f7f7fa,
+  'grey-dark-3': #3a2d32,
   'info': #6699cc,
-  //33658a,
 );
-
-//3A2D32
 
 $colors: map-merge($colors, $myColors);

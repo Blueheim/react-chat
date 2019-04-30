@@ -14,7 +14,6 @@ const signUpReducer = (state, action) => {
 };
 
 const signInReducer = (state, action) => {
-  console.log(action);
   switch (action.type) {
     case actions.SIGN_IN_PENDING:
       return { ...state, isLoading: true, data: null, error: null };
@@ -27,4 +26,17 @@ const signInReducer = (state, action) => {
   }
 };
 
-export { signInReducer, signUpReducer };
+const googleUrlReducer = (state, action) => {
+  switch (action.type) {
+    case actions.GOOGLE_URL_PENDING:
+      return { ...state, isLoading: true, data: null, error: null };
+    case actions.GOOGLE_URL_SUCCESS:
+      return { ...state, isLoading: false, data: action.payload, error: null };
+    case actions.GOOGLE_URL_FAILED:
+      return { ...state, isLoading: false, data: null, error: action.payload };
+    default:
+      throw new Error('Unexpected action');
+  }
+};
+
+export { signInReducer, signUpReducer, googleUrlReducer };

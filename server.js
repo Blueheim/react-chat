@@ -6,15 +6,21 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors());
-
 app.use(helmet());
 app.use(compression());
 
-app.use(express.static(path.resolve(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, '/build')));
 
-app.get('*', function(req, res) {
-  res.sendFile('index.html');
+// // oauth redirection
+// app.get('/google-auth', function(req, res) {
+//   console.log(req);
+//   res.sendFile('index.html');
+// });
+
+app.get('*', (req, res) => {
+  // console.log(req);
+  // console.log(path.resolve(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 const PORT = process.env.PORT || 4000;

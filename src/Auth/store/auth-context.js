@@ -1,14 +1,7 @@
 import React from 'react';
 
 const AuthContext = React.createContext({
-  userName: '',
-  updateUserName: () => {},
-  email: '',
-  updateEmail: () => {},
-  password: '',
-  updatePassword: () => {},
-  passwordConfirmation: '',
-  updatePasswordConfirmation: () => {},
+  init: () => {},
   isSignUpButtonDisabled: false,
   disableSignUpButton: () => {},
   enableSignUpButton: () => {},
@@ -16,8 +9,11 @@ const AuthContext = React.createContext({
   signUpData: {},
   signIn: () => {},
   GoogleSignIn: () => {},
-  authentication: { isAuthenticated: false, token: '' },
+  isAuthenticated: false,
   authenticate: () => {},
+  checkIsAuthenticated: () => {},
+  googleUrlData: {},
+  getGoogleUrl: () => {},
 });
 
 export default AuthContext;

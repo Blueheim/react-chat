@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import HomeNavigation from './HomeNavigation';
 import SignInForm from '../Auth/SignIn/SignInForm';
@@ -27,7 +27,7 @@ const HomeView = () => {
             I can't wait
           </Link>
         </div>
-        {!authContext.authentication.isAuthenticated && (
+        {!authContext.isAuthenticated && (
           <div className="home__auth-form m-fx-cl-c-c">
             <SignInForm />
           </div>

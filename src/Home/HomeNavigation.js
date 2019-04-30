@@ -24,10 +24,10 @@ const HomeNavigation = () => {
             <NavLink to="/">Help</NavLink>
           </li>
           <li className="nav__action m-tx-white">
-            {!authContext.authentication.isAuthenticated ? (
+            {!authContext.isAuthenticated ? (
               <NavLink to="/signin">Sign in</NavLink>
             ) : (
-              <NavLink to="/account">Your account</NavLink>
+              <NavLink to="/user/settings">Your profile</NavLink>
             )}
           </li>
         </ul>
